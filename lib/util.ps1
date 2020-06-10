@@ -61,8 +61,13 @@ function convertCsv {
     )
     $content = Get-Content $fileName | Select-Object -Skip 1
 
-    for ($i = 0; $i -lt $content.Count; $i++) {
-        $content[$i] = $content[$i] -replace '"', ''
+    if (($content | Measure-Object).count -eq 1) {
+        $content = $content -replace '"', ''
+    } else {
+        for ($i = 0; $i -lt $content.Count; $i++) {
+            $content[$i] = $content[$i] -replace '"', ''
+        }
     }
+    
     $content | Set-Content -Path $fileName
 }
